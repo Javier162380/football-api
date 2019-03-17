@@ -1,6 +1,6 @@
 package models
 
-type Games []struct {
+type Games struct {
 	RequestsUrl                string
 	Year                       int
 	MatchDate                  string
@@ -19,4 +19,35 @@ type Games []struct {
 	VisitingTeamballPosition   string
 	VisitingTeamScoreGoals     int
 	MatchResult                string
+}
+
+type PlayerStats struct {
+	PlayerID        int
+	Name            string
+	Year            int
+	Competition     string
+	Team            string
+	GamesPlayed     int
+	GamesStarting   int
+	GamesCompleted  int
+	GamesSustituted int
+	MinutePlayed    int
+	YellowCards     int
+	RedCards        int
+	Assits          int
+	GoalsScore      int
+}
+
+type PlayerInformation struct {
+	PlayerID       int
+	YearUrl        int
+	PlayerName     string
+	PlayerFullName string
+	BirthPlace     string
+	BirthDate      string
+	BirthCountry   string
+	Nationality    string
+	Position       string
+	Heigth         string
+	Weigth         string
 }

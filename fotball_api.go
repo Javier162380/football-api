@@ -1,34 +1,62 @@
 package main
 
 import (
-	"fmt"
 	"encoding/json"
-	"football_api/helpers"
-	"football_api/models"
+	"football-api/helpers"
+	"football-api/models"
 	"log"
+	"net/http"
 
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/s3"
+	"github.com/gorilla/mux"
 )
 
+func GetGamesStatsData(bytedata []byte) []*models.Games {
+
+	GamesStats := []*models.Games{}
+	err := json.Unmarshal(bytedata, &GamesStats)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return GamesStats
+
+}
+
+func GetPlayerInformationData(bytedata []byte) []*models.PlayerStats {
+
+	PlayerStats := []*models.PlayerStats{}
+
+	err := json.Unmarshal(bytedata, &PlayerStats)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return PlayerStats
+
+}
+
+func GetPlayerYearStats(w http.ResponseWriter, req *http.Request) {
+	params := mux.Vars(req)
+
+	for _, player := range PlayerIndormationData {
+
+	}
+
+
+}
+
+var PlayerInformationbuffer = helpers.ReadS3Data(helpers.Bucket_name,
+	helpers.Players_information_key)
+var GameStatsDatabuffer = helpers.ReadS3Data(helpers.Bucket_name,
+	helpers.Games_key)
+var PlayerInformationData = GetPlayerInformationData(PlayerInformationbuffer)
+var GameStatsData = GetGamesStatsData(GameStatsDatabuffer)
+
 func main() {
-	session := session.New()
-	s3_client := s3.New(session, aws.NewConfig().WithRegion("us-east-1"))
-	GamesData, err := helpers.DownloadS3Data(s3_client, helpers.Bucket_name,
-		helpers.Games_key)
 
-	if err != nil {
-		log.Fatal(err)
-	}
+	router := mux.NewRouter()
+	router.HandleFunc("/{playerid}/{year}", GetPlayerYearStats).Methods("GET")
 
-	GamesStats := models.Games{}
-
-	err = json.Unmarshal(GamesData, &GamesStats)
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	fmt.Println("GamesStats Already downloaded ", GamesStats)
 }
