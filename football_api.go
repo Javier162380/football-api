@@ -6,6 +6,7 @@ import (
 	"football-api/models"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/gorilla/mux"
 )
@@ -16,15 +17,17 @@ func main() {
 		helpers.Players_stats_key)
 	PlayertsInformationbuffer := helpers.ReadS3Data(helpers.Bucket_name,
 		helpers.Players_information_key)
-	GameStatsDatabuffer := helpers.ReadS3Data(helpers.Bucket_name,
-		helpers.Games_key)
+	/* GameStatsDatabuffer := helpers.ReadS3Data(helpers.Bucket_name,
+	helpers.Games_key) */
 	PlayerStatsData := GetPlayerStatsData(PlayerStatsbuffer)
 	PlayerInformationData := GetPlayerInformationData(PlayertsInformationbuffer)
-	GameStatsData := GetGamesStatsData(GameStatsDatabuffer)
+	/* GameStatsData := GetGamesStatsData(GameStatsDatabuffer) */
 
 	router := mux.NewRouter()
 	router.HandleFunc("/{playerid}/{year}",
 		GetPlayerYearsStats(PlayerStatsData, PlayerInformationData))
+
+	log.Fatal(http.ListenAndServe(":8000", router))
 
 }
 
@@ -75,13 +78,14 @@ func GetPlayerYearsStats(PlayerStatsData []*models.PlayerStats,
 	return func(w http.ResponseWriter, req *http.Request) {
 		params := mux.Vars(req)
 		for _, player := range PlayerStatsData {
-			if player.PlayerID == params["id"] && player.Year == parasm["year"] {
+			if strconv.Itoa(player.PlayerID) == params["id"] &&
+				strconv.Itoa(player.Year) == params["year"] {
 				json.NewEncoder(w).Encode(player)
 				return
 			}
 
 		}
-		json.NewEncoder(w).Encode(models.PlayerStats)
+		json.NewEncoder(w).Encode(models.PlayerStats{})
 		return
 	}
 }
