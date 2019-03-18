@@ -31,7 +31,7 @@ type PlayerStats struct {
 	GamesStarting   int
 	GamesCompleted  int
 	GamesSustituted int
-	MinutePlayed    string
+	MinutesPlayed   string
 	YellowCards     int
 	RedCards        int
 	Assits          int
@@ -53,6 +53,6 @@ type PlayerInformation struct {
 }
 
 type PlayerStatsProfile struct {
-	PlayerStats
-	PlayerInformation
+	*PlayerStats
+	*PlayerInformation
 }
