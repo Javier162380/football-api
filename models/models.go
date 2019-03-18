@@ -31,7 +31,7 @@ type PlayerStats struct {
 	GamesStarting   int
 	GamesCompleted  int
 	GamesSustituted int
-	MinutePlayed    int
+	MinutePlayed    string
 	YellowCards     int
 	RedCards        int
 	Assits          int
@@ -53,14 +53,6 @@ type PlayerInformation struct {
 }
 
 type PlayerStatsProfile struct {
-	*PlayerStats
-	PlayerInformation.PlayerName
-	PlayerInformation.PlayerFullName
-	PlayerInformation.BirthPlace
-	PlayerInformation.BirthDate
-	PlayerInformation.BirthCountry
-	PlayerInformation.Nationality
-	PlayerInformation.Position
-	PlayerInformation.Heigth
-	PlayerInformation.Weigth
+	PlayerStats
+	PlayerInformation
 }
