@@ -51,3 +51,16 @@ type PlayerInformation struct {
 	Heigth         string
 	Weigth         string
 }
+
+type PlayerStatsProfile struct {
+	*PlayerStats
+	PlayerInformation.PlayerName
+	PlayerInformation.PlayerFullName
+	PlayerInformation.BirthPlace
+	PlayerInformation.BirthDate
+	PlayerInformation.BirthCountry
+	PlayerInformation.Nationality
+	PlayerInformation.Position
+	PlayerInformation.Heigth
+	PlayerInformation.Weigth
+}
