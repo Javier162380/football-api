@@ -78,7 +78,7 @@ func GetPlayerYearsStats(PlayerStatsData []*models.PlayerStats,
 	return func(w http.ResponseWriter, req *http.Request) {
 		params := mux.Vars(req)
 		for _, player := range PlayerStatsData {
-			if strconv.Itoa(player.PlayerID) == params["id"] &&
+			if strconv.Itoa(player.PlayerID) == params["playerid"] &&
 				strconv.Itoa(player.Year) == params["year"] {
 				json.NewEncoder(w).Encode(player)
 				return
