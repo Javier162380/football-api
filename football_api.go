@@ -17,15 +17,12 @@ func main() {
 		helpers.Players_stats_key)
 	PlayertsInformationbuffer := helpers.ReadS3Data(helpers.Bucket_name,
 		helpers.Players_information_key)
-	/* GameStatsDatabuffer := helpers.ReadS3Data(helpers.Bucket_name,
-	helpers.Games_key) */
 	PlayerStatsData := GetPlayerStatsData(PlayerStatsbuffer)
 	PlayerInformationData := GetPlayerInformationData(PlayertsInformationbuffer)
-	/* GameStatsData := GetGamesStatsData(GameStatsDatabuffer) */
 
 	router := mux.NewRouter()
 	router.HandleFunc("/{playerid}/{year}",
-		GetPlayerYearsStats(PlayerStatsData, PlayerInformationData))
+		GetPlayerYearsStats(PlayerStatsData, PlayerInformationData)).Methods("GET")
 
 	log.Fatal(http.ListenAndServe(":8000", router))
 
@@ -77,15 +74,26 @@ func GetPlayerYearsStats(PlayerStatsData []*models.PlayerStats,
 	w http.ResponseWriter, req *http.Request) {
 	return func(w http.ResponseWriter, req *http.Request) {
 		params := mux.Vars(req)
+		player_id := params["playerid"]
+		year := params["year"]
+		var PlayerData models.PlayerStatsProfile
 		for _, player := range PlayerStatsData {
-			if strconv.Itoa(player.PlayerID) == params["playerid"] &&
-				strconv.Itoa(player.Year) == params["year"] {
-				json.NewEncoder(w).Encode(player)
+			if strconv.Itoa(player.PlayerID) == player_id &&
+				strconv.Itoa(player.Year) == year {
+				PlayerData.PlayerStats = player
+				for _, player := range PlayerInformationData {
+					if strconv.Itoa(player.PlayerID) == player_id &&
+						strconv.Itoa(player.YearUrl) == year {
+						PlayerData.PlayerInformation = player
+					}
+
+				}
+				json.NewEncoder(w).Encode(PlayerData)
 				return
 			}
 
 		}
-		json.NewEncoder(w).Encode(models.PlayerStats{})
+		json.NewEncoder(w).Encode(PlayerData)
 		return
 	}
 }
