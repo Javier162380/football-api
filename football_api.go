@@ -72,8 +72,7 @@ func GetPlayerInformationData(bytedata []byte) []*models.PlayerInformation {
 
 }
 
-func GetPlayerYearsStats(PlayerStatsData []*models.PlayerStats,
-	PlayerInformation []*models.PlayerInformation) func(w http.ResponseWriter, req *http.Request) {
+func GetPlayerYearsStats(PlayerStatsData []*models.PlayerStats, PlayerInformation []*models.PlayerInformation) func(w http.ResponseWriter, req *http.Request) {
 	return func(w http.ResponseWriter, req *http.Request) {
 
 		params := mux.Vars(req)
