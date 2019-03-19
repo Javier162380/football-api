@@ -17,6 +17,7 @@ func main() {
 		helpers.Players_stats_key)
 	PlayertsInformationbuffer := helpers.ReadS3Data(helpers.Bucket_name,
 		helpers.Players_information_key)
+
 	PlayerStatsData := GetPlayerStatsData(PlayerStatsbuffer)
 	PlayerInformationData := GetPlayerInformationData(PlayertsInformationbuffer)
 
@@ -70,18 +71,23 @@ func GetPlayerInformationData(bytedata []byte) []*models.PlayerInformation {
 }
 
 func GetPlayerYearsStats(PlayerStatsData []*models.PlayerStats,
-	PlayerInformationData []*models.PlayerInformation) func(
-	w http.ResponseWriter, req *http.Request) {
+	PlayerInformation []*models.PlayerInformation) func(w http.ResponseWriter,
+	req *http.Request) {
 	return func(w http.ResponseWriter, req *http.Request) {
+
 		params := mux.Vars(req)
 		player_id := params["playerid"]
 		year := params["year"]
+
 		var PlayerData models.PlayerStatsProfile
+
 		for _, player := range PlayerStatsData {
+
 			if strconv.Itoa(player.PlayerID) == player_id &&
 				strconv.Itoa(player.Year) == year {
 				PlayerData.PlayerStats = player
-				for _, player := range PlayerInformationData {
+
+				for _, player := range PlayerInformation {
 					if strconv.Itoa(player.PlayerID) == player_id &&
 						strconv.Itoa(player.YearUrl) == year {
 						PlayerData.PlayerInformation = player
