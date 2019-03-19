@@ -17,9 +17,11 @@ func main() {
 		helpers.Players_stats_key)
 	PlayertsInformationbuffer := helpers.ReadS3Data(helpers.Bucket_name,
 		helpers.Players_information_key)
-
+	GameStatsDatabuffer := helpers.ReadS3Data(helpers.Bucket_name,
+		helpers.Games_key)
 	PlayerStatsData := GetPlayerStatsData(PlayerStatsbuffer)
 	PlayerInformationData := GetPlayerInformationData(PlayertsInformationbuffer)
+	GameStatsData := GetGamesStatsData(GameStatsDatabuffer)
 
 	router := mux.NewRouter()
 	router.HandleFunc("/{playerid}/{year}",
@@ -71,8 +73,7 @@ func GetPlayerInformationData(bytedata []byte) []*models.PlayerInformation {
 }
 
 func GetPlayerYearsStats(PlayerStatsData []*models.PlayerStats,
-	PlayerInformationData []*models.PlayerInformation) func(w http.ResponseWriter,
-	req *http.Request) {
+	PlayerInformation []*models.PlayerInformation) func(w http.ResponseWriter, req *http.Request) {
 	return func(w http.ResponseWriter, req *http.Request) {
 
 		params := mux.Vars(req)
@@ -87,7 +88,7 @@ func GetPlayerYearsStats(PlayerStatsData []*models.PlayerStats,
 				strconv.Itoa(player.Year) == year {
 				PlayerData.PlayerStats = player
 
-				for _, player := range PlayerInformationData {
+				for _, player := range PlayerInformation {
 					if strconv.Itoa(player.PlayerID) == player_id &&
 						strconv.Itoa(player.YearUrl) == year {
 						PlayerData.PlayerInformation = player
