@@ -71,7 +71,7 @@ func GetPlayerInformationData(bytedata []byte) []*models.PlayerInformation {
 }
 
 func GetPlayerYearsStats(PlayerStatsData []*models.PlayerStats,
-	PlayerInformation []*models.PlayerInformation) func(w http.ResponseWriter,
+	PlayerInformationData []*models.PlayerInformation) func(w http.ResponseWriter,
 	req *http.Request) {
 	return func(w http.ResponseWriter, req *http.Request) {
 
@@ -87,7 +87,7 @@ func GetPlayerYearsStats(PlayerStatsData []*models.PlayerStats,
 				strconv.Itoa(player.Year) == year {
 				PlayerData.PlayerStats = player
 
-				for _, player := range PlayerInformation {
+				for _, player := range PlayerInformationData {
 					if strconv.Itoa(player.PlayerID) == player_id &&
 						strconv.Itoa(player.YearUrl) == year {
 						PlayerData.PlayerInformation = player
