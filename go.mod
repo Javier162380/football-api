@@ -1,6 +1,7 @@
 module github.com/Javier162380/football-api.git
 
 require (
+	football-api/controllers v0.0.0
 	football-api/helpers v0.0.0
 	football-api/models v0.0.0
 	github.com/aws/aws-sdk-go v1.18.3
@@ -11,3 +12,5 @@ require (
 replace football-api/helpers v0.0.0 => ./helpers
 
 replace football-api/models v0.0.0 => ./models
+
+replace football-api/controllers v0.0.0 => ./controllers
